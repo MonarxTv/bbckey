@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoonHub Pro</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background: radial-gradient(circle at top,#1a1a1a,#0d0d0d);
+  color:#fff;
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 50px;
+  backdrop-filter: blur(15px);
+  background: rgba(0,0,0,0.6);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+.logo{
+  font-size:2rem;
+  font-weight:800;
+  background:linear-gradient(90deg,#ff004c,#ff7a00);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  letter-spacing:1px;
+}
+
+.search{
+  width:45px;height:45px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  background:rgba(255,255,255,0.05);
+  transition:.3s;
+}
+.search:hover{
+  background:#ff004c;
+  transform:scale(1.15);
+}
+
+/* GRID */
+.grid{
+  padding:40px 60px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:30px;
+}
+
+/* CARD */
+.card{
+  position:relative;
+  height:360px;
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.4s;
+}
+
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.6s;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);
+  opacity:0.9;
+}
+
+/* HOVER */
+.card:hover{
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 20px 40px rgba(0,0,0,0.9);
+}
+
+.card:hover img{
+  transform:scale(1.1);
+}
+
+/* CONTENT */
+.content{
+  position:absolute;
+  bottom:0;
+  padding:20px;
+  width:100%;
+}
+
+.category{
+  font-size:0.8rem;
+  color:#aaa;
+}
+
+.title{
+  font-size:1.3rem;
+  margin-top:5px;
+  font-weight:600;
+}
+
+.play{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0.8);
+  font-size:50px;
+  opacity:0;
+  transition:.4s;
+}
+
+.card:hover .play{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  header{padding:15px 20px;}
+  .grid{padding:20px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">MoonHub</div>
+  <div class="search" onclick="location.href='search.html'">🔍</div>
+</header>
+
+<div class="grid" id="videos"></div>
+
+<script src="data.js"></script>
+<script>
+const container=document.getElementById("videos");
+
+function renderGrid(list){
+  container.innerHTML="";
+  list.forEach(movie=>{
+    const div=document.createElement("div");
+    div.className="card";
+
+    div.innerHTML=`
+      <img src="${movie.thumbnail}">
+      <div class="play">▶</div>
+      <div class="content">
+        <div class="category">${movie.categories.join(", ")}</div>
+        <div class="title">${movie.title}</div>
+      </div>
+    `;
+
+    div.onclick=()=>location.href=`list.html?id=${encodeURIComponent(movie.title)}`;
+    container.appendChild(div);
+  });
+}
+
+renderGrid(movies);
+</script>
+
+</body>
+</html>
