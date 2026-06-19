@@ -252,9 +252,11 @@ function renderSimilarMovies(movie, container){
 
 renderMovie();
 </script>
-  <script>
+<script>
 window.addEventListener("load", function () {
-  fluidPlayer("movie-video", {
+  const videoEl = document.getElementById("movie-video");
+
+  fluidPlayer(videoEl, {
     vastOptions: {
       adList: [
         {
