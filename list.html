@@ -184,6 +184,7 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="data.js"></script>
+  <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
 <script>
 function getParam(name){return new URLSearchParams(window.location.search).get(name);}
 
@@ -250,6 +251,20 @@ function renderSimilarMovies(movie, container){
 }
 
 renderMovie();
+</script>
+  <script>
+window.addEventListener("load", function () {
+  fluidPlayer("movie-video", {
+    vastOptions: {
+      adList: [
+        {
+          roll: "preRoll",
+          vastTag: "https://s.magsrv.com/v1/vast.php?idz=5954624"
+        }
+      ]
+    }
+  });
+});
 </script>
 </body>
 </html>
