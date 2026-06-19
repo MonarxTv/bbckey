@@ -5,7 +5,8 @@
 <meta charset="UTF-8">
 <title>Movie Details</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobil moslashuv -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
 body {
@@ -38,65 +39,51 @@ body {
 }
 .actor-card {
   flex:0 0 auto;
-  width:90px; /* desktop uchun */
+  width:90px;
   display:flex;
   flex-direction:column;
   align-items:center;
   cursor:pointer;
-  transition: transform 0.3s;
 }
 .actor-card img {
   width:100%;
-  height:120px; /* desktop */
+  height:120px;
   object-fit:cover;
   border-radius:10px;
   border:2px solid #ff4500;
   box-shadow:0 5px 15px rgba(255,69,0,0.5);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.actor-card:hover img {
-  transform: scale(1.05);
-  box-shadow:0 10px 25px rgba(255,69,0,0.7);
 }
 .actor-card h3 {
   margin-top:6px;
   font-size:12px;
   text-align:center;
   color:#ff4500;
-  font-weight:600;
 }
-.actor-card:hover h3 { color:#ffd700; font-size:13px; }
 
 /* === VIDEO PLAYER === */
 .player {
   width:100%;
   max-width:100%;
   position:relative;
-  padding-top:56.25%; /* 16:9 ratio */
+  padding-top:56.25%;
   border-radius:10px;
   overflow:hidden;
   margin-bottom:15px;
-  box-shadow:0 10px 25px rgba(255,69,0,0.5);
 }
 .player video {
   position:absolute;
-  top:0; left:0;
+  top:0;
+  left:0;
   width:100%;
   height:100%;
-  border:none;
-  border-radius:10px;
 }
 
-/* === MOVIE TITLE === */
+/* === TITLE === */
 #movie-title {
   font-size:1.5rem;
   font-weight:700;
   margin:10px 0;
   text-align:center;
-  background: linear-gradient(90deg,#ff4500,#ffd700);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow:2px 2px 5px rgba(0,0,0,0.7);
 }
 
 /* === CATEGORIES === */
@@ -104,157 +91,97 @@ body {
   display:flex;
   gap:8px;
   flex-wrap:wrap;
-  justify-content:flex-start;
-  margin-bottom:20px;
-  width:100%;
 }
 .card-category {
   padding:5px 14px;
   background: linear-gradient(135deg,#ff4500,#ffd700);
   border-radius:20px;
-  cursor:pointer;
-  color:#fff;
-  font-size:12px;
-  transition: transform 0.3s, background 0.3s;
-}
-.card-category:hover {
-  background: linear-gradient(135deg,#ffd700,#ff4500);
-  transform:scale(1.05);
 }
 
-/* === SIMILAR MOVIES === */
+/* === SIMILAR === */
 #similar-movies {
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
+}
+.similar-card img {
   width:100%;
-  margin-bottom:30px;
-}
-.similar-card {
-  border-radius:10px;
-  overflow:hidden;
-  cursor:pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  background:#1f1f1f;
-  box-shadow:0 5px 15px rgba(255,69,0,0.5);
-  display:flex;
-  flex-direction:column;
-}
-.similar-card img { width:100%; height:150px; object-fit:cover; transition: transform 0.3s; }
-.similar-card h3 { text-align:center; color:#ff4500; margin:5px; font-size:12px; }
-.similar-card:hover { transform:scale(1.05); box-shadow:0 10px 25px rgba(255,69,0,0.7); }
-.similar-card:hover img { transform:scale(1.05); }
-
-/* === RESPONSIVE ADJUSTMENTS === */
-@media(max-width:768px){
-  .actor-card { width:80px; }       /* kattaroq aktyor */
-  .actor-card img { height:120px; }
-  .actor-card h3 { font-size:12px; } 
-  #similar-movies { grid-template-columns:repeat(2,1fr); }
-  #movie-title { font-size:1.3rem; }
-}
-@media(max-width:480px){
-  .actor-card { width:70px; }       /* telefon uchun */
-  .actor-card img { height:100px; }
-  .actor-card h3 { font-size:11px; }
-  #similar-movies { grid-template-columns:repeat(2,1fr); }
-  #movie-title { font-size:1.1rem; }
-  .card-category { font-size:10px; padding:4px 10px; }
+  height:150px;
+  object-fit:cover;
 }
 </style>
+
 </head>
 <body>
 
-<!-- ACTORS -->
 <div class="actors-section" id="actors"></div>
 
-<!-- VIDEO PLAYER -->
 <div class="player">
   <video id="movie-video" controls playsinline></video>
 </div>
 
-<!-- MOVIE TITLE -->
 <div id="movie-title"></div>
 
-<!-- CATEGORIES -->
 <div class="grid-categories" id="categories"></div>
 
-<!-- SIMILAR MOVIES -->
 <div id="similar-movies"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="data.js"></script>
-  <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
+<script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
+
 <script>
-function getParam(name){return new URLSearchParams(window.location.search).get(name);}
+function getParam(name){
+  return new URLSearchParams(window.location.search).get(name);
+}
 
 function renderMovie(){
-  const titleEl = document.getElementById("movie-title");
-  const videoEl = document.getElementById("movie-video");
-  const actorsEl = document.getElementById("actors");
-  const categoriesEl = document.getElementById("categories");
-  const similarEl = document.getElementById("similar-movies");
-
   const movieId = getParam("id");
-  const movie = movies[movieId] || movies.find((m,i)=> i==movieId || m.title==movieId) || movies[0];
-  if(!movie) return;
+  const movie = movies[movieId] || movies[0];
 
-  // Player
+  const videoEl = document.getElementById("movie-video");
+
   if(movie.video.endsWith(".m3u8") && Hls.isSupported()){
     const hls = new Hls();
     hls.loadSource(movie.video);
     hls.attachMedia(videoEl);
-    hls.on(Hls.Events.MANIFEST_PARSED, ()=>videoEl.play());
   } else {
     videoEl.src = movie.video;
   }
 
-  // Title
-  titleEl.textContent = movie.title;
+  document.getElementById("movie-title").textContent = movie.title;
 
-  // Actors
+  const actorsEl = document.getElementById("actors");
   actorsEl.innerHTML = "";
   movie.actors.forEach(a=>{
     const div = document.createElement("div");
     div.className="actor-card";
-    div.innerHTML = `<img src="${a.image}" alt="${a.name}"><h3>${a.name}</h3>`;
-    div.onclick = ()=>window.location.href=`actors.html?name=${encodeURIComponent(a.name)}`;
+    div.innerHTML=`<img src="${a.image}"><h3>${a.name}</h3>`;
     actorsEl.appendChild(div);
   });
 
-  // Categories
-  categoriesEl.innerHTML="";
+  const catEl=document.getElementById("categories");
+  catEl.innerHTML="";
   movie.categories.forEach(c=>{
-    const div = document.createElement("div");
+    const div=document.createElement("div");
     div.className="card-category";
     div.textContent=c;
-    div.onclick = ()=>window.location.href=`kategory.html?cat=${encodeURIComponent(c)}`;
-    categoriesEl.appendChild(div);
-  });
-
-  // Similar Movies
-  renderSimilarMovies(movie, similarEl);
-}
-
-function renderSimilarMovies(movie, container){
-  container.innerHTML="";
-  const actorMatches = movies.filter(m=> m !== movie && m.actors.some(a=> movie.actors.map(x=>x.name).includes(a.name)));
-  const categoryMatches = movies.filter(m=> m !== movie && !actorMatches.includes(m) && m.categories.some(c=> movie.categories.includes(c)));
-  const combined = [...actorMatches, ...categoryMatches].slice(0,4);
-  combined.forEach(f=>{
-    const div = document.createElement("div");
-    div.className="similar-card";
-    div.innerHTML=`<img src="${f.thumbnail}" alt="${f.title}"><h3>${f.title}</h3>`;
-    div.onclick=()=>window.location.href=`list.html?id=${f.title}`;
-    container.appendChild(div);
+    catEl.appendChild(div);
   });
 }
 
 renderMovie();
-</script>
-<script>
+
+/* =========================
+   🔥 FIXED FLUID PLAYER
+========================= */
 window.addEventListener("load", function () {
-  fluidPlayer("movie-video", {
+
+  const player = fluidPlayer("movie-video", {
+    layoutControls: {
+      autoPlayAfterAd: true,
+      finishVideoToShowPoster: false
+    },
     vastOptions: {
       adList: [
         {
@@ -264,7 +191,18 @@ window.addEventListener("load", function () {
       ]
     }
   });
+
+  const video = document.getElementById("movie-video");
+
+  // 🔥 Skip bosilganda yoki ad tugaganda video davom etadi
+  document.addEventListener("click", function () {
+    if (video.paused) {
+      video.play();
+    }
+  });
+
 });
 </script>
+
 </body>
 </html>
