@@ -15,12 +15,16 @@
   <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
 
   <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
     body {
       font-family:'Montserrat', sans-serif;
       background:#121212;
       color:#fff;
-      margin:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
       padding:10px;
+      width:100%;
     }
     #movie-title {
       font-size:1.5rem;
@@ -30,11 +34,71 @@
       background: linear-gradient(90deg,#ff4500,#ffd700);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow:2px 2px 5px rgba(0,0,0,0.7);
     }
     .player {
+      width:100%;
       max-width:100%;
       margin-bottom:20px;
     }
+    .actors-section {
+      display:inline-flex;
+      gap:10px;
+      overflow-x:auto;
+      padding:10px 0;
+      margin-bottom:15px;
+    }
+    .actor-card {
+      flex:0 0 auto;
+      width:90px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    .actor-card img {
+      width:100%;
+      height:120px;
+      object-fit:cover;
+      border-radius:10px;
+      border:2px solid #ff4500;
+    }
+    .actor-card h3 {
+      margin-top:6px;
+      font-size:12px;
+      text-align:center;
+      color:#ff4500;
+    }
+    .grid-categories {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+      width:100%;
+    }
+    .card-category {
+      padding:5px 14px;
+      background: linear-gradient(135deg,#ff4500,#ffd700);
+      border-radius:20px;
+      color:#fff;
+      font-size:12px;
+    }
+    #similar-movies {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+      gap:10px;
+      width:100%;
+      margin-bottom:30px;
+    }
+    .similar-card {
+      border-radius:10px;
+      overflow:hidden;
+      background:#1f1f1f;
+      display:flex;
+      flex-direction:column;
+      cursor:pointer;
+    }
+    .similar-card img { width:100%; height:150px; object-fit:cover; }
+    .similar-card h3 { text-align:center; color:#ff4500; margin:5px; font-size:12px; }
   </style>
 </head>
 <body>
@@ -48,10 +112,10 @@
 <div id="movie-title"></div>
 
 <!-- ACTORS -->
-<div id="actors"></div>
+<div class="actors-section" id="actors"></div>
 
 <!-- CATEGORIES -->
-<div id="categories"></div>
+<div class="grid-categories" id="categories"></div>
 
 <!-- SIMILAR MOVIES -->
 <div id="similar-movies"></div>
@@ -93,7 +157,8 @@ function renderMovie(){
   actorsEl.innerHTML = "";
   movie.actors.forEach(a=>{
     const div = document.createElement("div");
-    div.innerHTML = `<img src="${a.image}" alt="${a.name}" width="80"><p>${a.name}</p>`;
+    div.className="actor-card";
+    div.innerHTML = `<img src="${a.image}" alt="${a.name}"><h3>${a.name}</h3>`;
     actorsEl.appendChild(div);
   });
 
@@ -101,7 +166,8 @@ function renderMovie(){
   const categoriesEl = document.getElementById("categories");
   categoriesEl.innerHTML="";
   movie.categories.forEach(c=>{
-    const div = document.createElement("span");
+    const div = document.createElement("div");
+    div.className="card-category";
     div.textContent=c;
     categoriesEl.appendChild(div);
   });
@@ -113,7 +179,8 @@ function renderMovie(){
   const categoryMatches = movies.filter(m=> m !== movie && !actorMatches.includes(m) && m.categories.some(c=> movie.categories.includes(c)));
   [...actorMatches, ...categoryMatches].slice(0,4).forEach(f=>{
     const div = document.createElement("div");
-    div.innerHTML=`<img src="${f.thumbnail}" alt="${f.title}" width="120"><p>${f.title}</p>`;
+    div.className="similar-card";
+    div.innerHTML=`<img src="${f.thumbnail}" alt="${f.title}"><h3>${f.title}</h3>`;
     div.onclick=()=>window.location.href=`list.html?id=${f.title}`;
     similarEl.appendChild(div);
   });
