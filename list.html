@@ -270,24 +270,40 @@ setTimeout(() => {
   });
 }, 200);
 /* =========================
-   FULLSCREEN + LANDSCAPE FIX
+   FULLSCREEN + LANDSCAPE FIX (STABLE VERSION)
 ========================= */
 
-document.addEventListener("fullscreenchange", async () => {
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+function lockLandscape() {
+  if (screen.orientation && screen.orientation.lock && !isIOS()) {
+    screen.orientation.lock("landscape").catch(() => {});
+  }
+}
+
+function unlockLandscape() {
+  if (screen.orientation && screen.orientation.unlock) {
+    screen.orientation.unlock();
+  }
+}
+
+/* Fullscreen change handler */
+document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) {
-    try {
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock("landscape");
-      }
-    } catch (e) {
-      console.log("Orientation lock error:", e);
-    }
+    lockLandscape();
   } else {
-    try {
-      if (screen.orientation && screen.orientation.unlock) {
-        screen.orientation.unlock();
-      }
-    } catch (e) {}
+    unlockLandscape();
+  }
+});
+
+/* Safari / old WebKit support */
+document.addEventListener("webkitfullscreenchange", () => {
+  if (document.webkitFullscreenElement) {
+    lockLandscape();
+  } else {
+    unlockLandscape();
   }
 });
 </script>
