@@ -2,7 +2,6 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-  <meta name="6a97888e-site-verification" content="4abb978095ff1e49fea918d0c3f9c008">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KEYBBC.xyz Black and white porno</title>
 
@@ -35,7 +34,6 @@ header{
   background:linear-gradient(90deg,#ff004c,#ff7a00);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  letter-spacing:1px;
 }
 
 .search{
@@ -64,7 +62,7 @@ header{
 /* CARD */
 .card{
   position:relative;
-  height:360px;
+  height:270px;
   border-radius:18px;
   overflow:hidden;
   cursor:pointer;
@@ -86,7 +84,6 @@ header{
   opacity:0.9;
 }
 
-/* HOVER */
 .card:hover{
   transform:translateY(-10px) scale(1.03);
   box-shadow:0 20px 40px rgba(0,0,0,0.9);
@@ -148,16 +145,18 @@ header{
 <div class="grid" id="videos"></div>
 
 <script src="data.js"></script>
+
 <script>
-const container=document.getElementById("videos");
+const container = document.getElementById("videos");
 
 function renderGrid(list){
   container.innerHTML="";
-  list.forEach(movie=>{
-    const div=document.createElement("div");
-    div.className="card";
 
-    div.innerHTML=`
+  list.forEach(movie=>{
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
       <img src="${movie.thumbnail}">
       <div class="play">▶</div>
       <div class="content">
@@ -166,7 +165,10 @@ function renderGrid(list){
       </div>
     `;
 
-    div.onclick=()=>location.href=`list.html?id=${encodeURIComponent(movie.title)}`;
+    // ✅ FIX: title bilan ochish
+div.onclick = () => {
+  window.location.href = `list.html?id=${movie.id}`;
+};
     container.appendChild(div);
   });
 }
