@@ -269,7 +269,27 @@ setTimeout(() => {
     }
   });
 }, 200);
+/* =========================
+   FULLSCREEN + LANDSCAPE FIX
+========================= */
 
+document.addEventListener("fullscreenchange", async () => {
+  if (document.fullscreenElement) {
+    try {
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (e) {
+      console.log("Orientation lock error:", e);
+    }
+  } else {
+    try {
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+    } catch (e) {}
+  }
+});
 </script>
 
 </body>
