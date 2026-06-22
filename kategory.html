@@ -4,6 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>Category Movies</title>
+
 <style>
 /* === BASE STYLES === */
 * { box-sizing: border-box; margin:0; padding:0; }
@@ -27,8 +28,8 @@ body {
 /* === CARD === */
 .card {
   position:relative;
-  width:100%; /* Eni butun ekran */
-  max-width:1000px; /* Desktopda cheklov */
+  width:100%;
+  max-width:1000px;
   border-radius:12px;
   overflow:hidden;
   cursor:pointer;
@@ -46,7 +47,7 @@ body {
 /* === CARD IMAGE === */
 .card img {
   width:100%;
-  height:400px; /* Rasm balansi katta */
+  height:400px;
   object-fit:cover;
   transition: transform 0.4s ease;
 }
@@ -97,28 +98,44 @@ body {
 }
 </style>
 </head>
+
 <body>
 
 <div class="grid" id="category-movies"></div>
 
 <script src="data.js"></script>
+
 <script>
-function getParam(name){return new URLSearchParams(window.location.search).get(name);}
+function getParam(name){
+  return new URLSearchParams(window.location.search).get(name);
+}
+
 function renderCategoryMovies(){
   const cat = getParam("cat");
   const container = document.getElementById("category-movies");
-  const catMovies = cat ? movies.filter(m=>m.categories.includes(cat)) : movies;
+
+  const catMovies = movies.filter(m =>
+    cat ? m.categories.includes(cat) : true
+  );
 
   catMovies.forEach(m => {
     const div = document.createElement("div");
     div.className = "card";
+
     div.innerHTML = `
       <img src="${m.thumbnail}" alt="${m.title}">
       <h3>${m.title}</h3>
       <div class="subtitle">${m.categories.join(", ")}</div>
       <div class="play-icon">▶</div>
     `;
-    div.onclick = () => window.location.href=`list.html?id=${encodeURIComponent(m.title)}`;
+
+    // 🔥 FIX ASOSIY QISM
+    div.onclick = () => {
+      div.onclick = () => {
+  window.location.href = `list.html?id=${m.id}`;
+};
+    };
+
     container.appendChild(div);
   });
 }
