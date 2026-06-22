@@ -5,7 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Video Player</title>
 
-<meta http-equiv="Delegate-CH" content="Sec-CH-UA https://s.magsrv.com; Sec-CH-UA-Mobile https://s.magsrv.com;">
+<!-- 🔥 Client Hints (FULL VERSION - UPDATED) -->
+<meta http-equiv="Delegate-CH" content="
+Sec-CH-UA https://s.magsrv.com;
+Sec-CH-UA-Mobile https://s.magsrv.com;
+Sec-CH-UA-Arch https://s.magsrv.com;
+Sec-CH-UA-Model https://s.magsrv.com;
+Sec-CH-UA-Platform https://s.magsrv.com;
+Sec-CH-UA-Platform-Version https://s.magsrv.com;
+Sec-CH-UA-Bitness https://s.magsrv.com;
+Sec-CH-UA-Full-Version-List https://s.magsrv.com;
+Sec-CH-UA-Full-Version https://s.magsrv.com;
+">
 
 <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
 
@@ -31,7 +42,6 @@ body{
 /* =========================
    VIDEO PLAYER (DO NOT TOUCH)
 ========================= */
-/* intentionally unchanged */
 .video-box{
   position:relative;
   width:100%;
@@ -178,18 +188,14 @@ video{
 
 <div class="container">
 
-  <!-- VIDEO (UNCHANGED) -->
   <div class="video-box">
     <video id="my-video" controls></video>
   </div>
 
-  <!-- TITLE -->
   <div class="title" id="title"></div>
 
-  <!-- TAGS -->
   <div class="tags" id="tags"></div>
 
-  <!-- ACTORS -->
   <div class="actors" id="actors"></div>
 
 </div>
@@ -217,7 +223,6 @@ video.load();
 
 document.getElementById("title").innerText = movie.title;
 
-// TAGS
 const tagsDiv = document.getElementById("tags");
 (movie.categories || []).forEach(cat => {
   const span = document.createElement("span");
@@ -230,7 +235,6 @@ const tagsDiv = document.getElementById("tags");
   tagsDiv.appendChild(span);
 });
 
-// ACTORS
 const actorsDiv = document.getElementById("actors");
 
 (movie.actors || []).forEach(actor => {
@@ -249,7 +253,6 @@ const actorsDiv = document.getElementById("actors");
   actorsDiv.appendChild(div);
 });
 
-// FLUID PLAYER (UNCHANGED)
 setTimeout(() => {
   fluidPlayer("my-video", {
     layoutControls: {
